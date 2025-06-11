@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { formatTimestamp } from '@welshman/lib';
 	import { deriveProfileDisplay } from '@welshman/app';
-	import { parse, renderAsHtml } from '@welshman/content';
-	import NoteContent from '$lib/NoteContent.svelte'
+	import NoteContent from '$lib/NoteContent.svelte';
 
 	const { event } = $props();
 	const profileDisplay = deriveProfileDisplay(event.pubkey);

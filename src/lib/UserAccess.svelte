@@ -25,9 +25,7 @@
 	</div>
 {:then [_, { error, result }]}
 	{#if error}
-		<div class="rounded-box bg-danger text-danger-content p-4">
-			Failed to load banned users: {error}
-		</div>
+		<p class="py-20 text-center">Failed to load banned users: {error}</p>
 	{:else}
 		<div class="flex flex-col gap-4">
 			{#each result as { pubkey, reason } (pubkey)}
@@ -37,4 +35,6 @@
 			{/each}
 		</div>
 	{/if}
+{:catch}
+	<p class="py-20 text-center">Failed to load banned users</p>
 {/await}

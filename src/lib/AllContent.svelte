@@ -61,7 +61,7 @@
 					<th>Author</th>
 					<th>Kind</th>
 					<th>Date</th>
-					<th>Content</th>
+					<th class="hidden lg:table-cell">Content</th>
 					<th>Actions</th>
 				</tr>
 			</thead>
@@ -73,5 +73,8 @@
 				{/each}
 			</tbody>
 		</table>
+		{#if events.length === 0}
+			<p class="py-20 text-center">No events found!</p>
+		{/if}
 	{/await}
 </div>

@@ -3,6 +3,7 @@
 	import { formatTimestamp } from '@welshman/lib';
 	import { ManagementMethod } from '@welshman/util';
 	import { eventLink } from '$lib/state';
+	import NoteContent from '$lib/NoteContent.svelte';
 
 	const { url, event, onremove } = $props();
 
@@ -48,8 +49,8 @@
 </script>
 
 <tr>
-	<td>
-		<span class="font-semibold">@{$profileDisplay}</span>
+	<td class="font-semibold wrap-anywhere">
+		@{$profileDisplay}
 	</td>
 	<td>
 		<span class="badge badge-xs badge-outline badge-round">{event.kind}</span>
@@ -57,8 +58,8 @@
 	<td class="text-xs opacity-75">
 		{formatTimestamp(event.created_at)}
 	</td>
-	<td class="max-w-xs truncate">
-		{event.content}
+	<td class="hidden max-w-xs truncate lg:table-cell">
+		<NoteContent {event} />
 	</td>
 	<td>
 		<div class="dropdown dropdown-end">

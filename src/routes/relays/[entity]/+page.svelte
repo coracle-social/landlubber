@@ -5,15 +5,15 @@
 	import Reports from '$lib/Reports.svelte';
 	import UserAccess from '$lib/UserAccess.svelte';
 	import AllContent from '$lib/AllContent.svelte';
-	import {selectedRelay} from '$lib/state'
+	import { selectedRelay } from '$lib/state';
 
 	const { entity } = $page.params;
-	const url = normalizeRelayUrl(decodeRelay(entity))
+	const url = normalizeRelayUrl(decodeRelay(entity));
 	const navItems = ['Reports', 'User Access', 'All Content'];
 
 	let active = $state('Reports');
 
-	selectedRelay.set(url)
+	selectedRelay.set(url);
 </script>
 
 <div class="flex flex-col gap-4">
@@ -30,7 +30,7 @@
 				</button>
 			{/each}
 		</nav>
-		<main class="flex flex-1 flex-col gap-8 min-w-0 overflow-hidden">
+		<main class="flex min-w-0 flex-1 flex-col gap-4 overflow-hidden">
 			{#if active === 'Reports'}
 				<Reports {url} />
 			{:else if active === 'User Access'}

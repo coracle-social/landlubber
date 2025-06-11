@@ -1,2 +1,8 @@
 @import 'tailwindcss';
 @plugin "daisyui";
+
+@layer components {
+	.note-content a {
+		@apply text-primary cursor-pointer;
+	}
+}

@@ -4,6 +4,6 @@
 	const { event } = $props();
 </script>
 
-<div class="break-words overflow-wrap-anywhere">
-  {@html renderAsHtml(parse(event)).toString()}
+<div class="note-content wrap-anywhere">
+	{@html renderAsHtml(parse(event)).toString()}
 </div>

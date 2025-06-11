@@ -1,4 +1,4 @@
-#  Landlubber
+# Landlubber
 
 **A NIP 86 Nostr relay manager**
 

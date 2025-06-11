@@ -1,6 +1,6 @@
 <script lang="ts">
 	import '../app.css';
-	import {page} from '$app/stores'
+	import { page } from '$app/stores';
 	import { displayProfile, displayRelayUrl } from '@welshman/util';
 	import { deriveProfile, pubkey } from '@welshman/app';
 	import { userRelays, encodeRelay, selectedRelay } from '$lib/state';
@@ -95,8 +95,8 @@
 	</header>
 	<main class="container mx-auto p-4">
 		{#if $pubkey}
-  		{#key $page.url}
-  			{@render children()}
+			{#key $page.url}
+				{@render children()}
 			{/key}
 		{:else}
 			<div class="hero py-20">

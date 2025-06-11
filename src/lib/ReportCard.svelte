@@ -1,14 +1,14 @@
 <script lang="ts">
-	import { deriveProfileDisplay, manageRelay } from '@welshman/app';
+	import { manageRelay } from '@welshman/app';
 	import { formatTimestamp } from '@welshman/lib';
-	import { getTag, displayProfile, ManagementMethod } from '@welshman/util';
-	import { deriveEvent } from '$lib/state';
+	import { getTag, ManagementMethod } from '@welshman/util';
+	import ProfileLink from '$lib/ProfileLink.svelte';
 	import NoteContent from '$lib/NoteContent.svelte';
 	import NoteCard from '$lib/NoteCard.svelte';
+	import { deriveEvent, eventLink } from '$lib/state';
 
 	const { url, event, onremove } = $props();
 
-	const profileDisplay = deriveProfileDisplay(event.pubkey);
 	const etag = getTag('e', event.tags);
 	const ptag = getTag('p', event.tags);
 	const reason = etag?.[2] || ptag?.[2] || 'No reason provided';
@@ -58,9 +58,7 @@
 	<div class="card-body flex flex-col gap-4">
 		<div class="flex items-center justify-between">
 			<div class="text-sm opacity-75">
-				Submitted by <span class="font-semibold">@{$profileDisplay}</span> on {formatTimestamp(
-					event.created_at
-				)}
+				Submitted by <ProfileLink pubkey={event.pubkey} /> on {formatTimestamp(event.created_at)}
 			</div>
 			<div class="bg-primary text-primary-content rounded-full px-2 py-1">
 				{reason}
@@ -80,12 +78,7 @@
 				</div>
 			{/if}
 		{:else if ptag}
-			<div class="alert alert-info">
-				<div>
-					<h4 class="font-semibold">Reported User</h4>
-					<p class="text-sm opacity-75">User: {displayProfile({ pubkey: ptag[1] })}</p>
-				</div>
-			</div>
+			<p><ProfileLink pubkey={ptag[1]} /> reported for {reason}</p>
 		{/if}
 		{#if event.content}
 			<div class="card bg-base-100">
@@ -111,6 +104,9 @@
 					tabindex="0"
 					class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow"
 				>
+					{#if target && $target}
+						<li><a href={eventLink($target)} target="_blank">View on Coracle</a></li>
+					{/if}
 					<li><button onclick={dismissReport}>Dismiss</button></li>
 					{#if etag}
 						<li><button onclick={deleteEvent}>Delete event</button></li>
