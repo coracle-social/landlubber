@@ -40,9 +40,37 @@
 		"vite": "^6.2.6",
 		"vitest": "^3.2.3"
 	},
+	"dependencies": {
+		"@welshman/app": "^0.3.4",
+		"@welshman/content": "^0.3.4",
+		"@welshman/editor": "^0.3.4",
+		"@welshman/feeds": "^0.3.4",
+		"@welshman/lib": "^0.3.4",
+		"@welshman/net": "^0.3.4",
+		"@welshman/relay": "^0.3.4",
+		"@welshman/router": "^0.3.4",
+		"@welshman/signer": "^0.3.4",
+		"@welshman/store": "^0.3.4",
+		"@welshman/util": "^0.3.4",
+		"daisyui": "^5.0.43",
+		"nostr-tools": "^2.15.0"
+	},
 	"pnpm": {
 		"onlyBuiltDependencies": [
 			"esbuild"
-		]
+		],
+		"overrides": {
+  		"@welshman/app": "../welshman/packages/app",
+  		"@welshman/content": "../welshman/packages/content",
+  		"@welshman/editor": "../welshman/packages/editor",
+  		"@welshman/feeds": "../welshman/packages/feeds",
+  		"@welshman/lib": "../welshman/packages/lib",
+  		"@welshman/net": "../welshman/packages/net",
+  		"@welshman/relay": "../welshman/packages/relay",
+  		"@welshman/router": "../welshman/packages/router",
+  		"@welshman/signer": "../welshman/packages/signer",
+  		"@welshman/store": "../welshman/packages/store",
+  		"@welshman/util": "../welshman/packages/util"
+		}
 	}
 }
