@@ -31,7 +31,7 @@
     				</div>
     				<div class="dropdown dropdown-end">
     					<div tabindex="0" role="button" class="btn btn-ghost btn-sm">
-    						<span class="text-sm">{displayRelayUrl($selectedRelay) || 'No relay selected'}</span>
+    						<span class="text-sm">{$selectedRelay ? displayRelayUrl($selectedRelay) : 'No relay selected'}</span>
     						<svg
     							class="h-4 w-4 fill-current"
     							xmlns="http://www.w3.org/2000/svg"
@@ -73,12 +73,54 @@
   	{#if $pubkey}
   		{@render children()}
 		{:else}
-  		<div class="my-20 text-center flex flex-col gap-8">
-    		<p>Please log in to get started.</p>
-    		<div>
-  				<button class="btn btn-primary" onclick={login}>Log In with Nostr</button>
-    		</div>
-  		</div>
+			<div class="hero py-20">
+				<div class="hero-content text-center">
+					<div class="max-w-md">
+						<h1 class="text-5xl font-bold mb-4" style="font-family: 'Pirata One', serif;">
+							Welcome aboard!
+						</h1>
+						<p class="text-lg mb-6">
+							Landlubber is your trusty mate for managing Nostr relays. Keep watch over your content, manage user access, and maintain order across the decentralized seas.
+						</p>
+						<div class="grid grid-cols-1 gap-4 text-left mb-6">
+							<div class="flex items-start gap-3">
+								<div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+									<svg class="w-3 h-3 text-primary-content" fill="currentColor" viewBox="0 0 20 20">
+										<path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+									</svg>
+								</div>
+								<div>
+									<h3 class="font-semibold">Content Management</h3>
+									<p class="text-sm opacity-70">Monitor and moderate content across your relays</p>
+								</div>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+									<svg class="w-3 h-3 text-primary-content" fill="currentColor" viewBox="0 0 20 20">
+										<path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+									</svg>
+								</div>
+								<div>
+									<h3 class="font-semibold">User Access Control</h3>
+									<p class="text-sm opacity-70">Manage user permissions and handle reports</p>
+								</div>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+									<svg class="w-3 h-3 text-primary-content" fill="currentColor" viewBox="0 0 20 20">
+										<path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+									</svg>
+								</div>
+								<div>
+									<h3 class="font-semibold">Relay Monitoring</h3>
+									<p class="text-sm opacity-70">Keep track of multiple relays from one dashboard</p>
+								</div>
+							</div>
+						</div>
+    				<button class="btn btn-primary mt-8" onclick={login}>Get Started</button>
+					</div>
+				</div>
+			</div>
 		{/if}
 	</main>
 </div>
