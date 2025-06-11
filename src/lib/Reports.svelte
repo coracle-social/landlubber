@@ -10,6 +10,8 @@
 
   const {url} = $props()
 
+  const removed = $state<string[]>([])
+
   const ctrl = makeFeedController({
     useWindowing: true,
     feed: makeIntersectionFeed(makeRelayFeed(url), makeKindFeed(REPORT)),
@@ -49,6 +51,8 @@
 </div>
 <div class="scroll-container flex flex-col gap-4" bind:this={element}>
   {#each events as event (event.id)}
-    <ReportCard {url} {event} />
+    {#if !removed.includes(event.id)}
+      <ReportCard {url} {event} onremove={() => removed.push(event.id)} />
+    {/if}
   {/each}
 </div>

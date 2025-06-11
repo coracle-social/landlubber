@@ -4,8 +4,9 @@
   import {getTag, ManagementMethod} from '@welshman/util'
   import {deriveEvent} from '$lib/state'
   import NoteContent from '$lib/NoteContent.svelte'
+  import NoteCard from '$lib/NoteCard.svelte'
 
-  const {url, event} = $props()
+  const {url, event, onremove} = $props()
 
   const profileDisplay = deriveProfileDisplay(event.pubkey)
   const etag = getTag('e', event.tags)
@@ -13,23 +14,44 @@
   const reason = etag?.[2] || ptag?.[2] || "No reason provided"
   const target = etag ? deriveEvent(etag[1], [url]) : undefined
 
-  const dismissReport = () =>
-    manageRelay(url, {
+  const dismissReport = async () => {
+    const {error, result} = await manageRelay(url, {
       method: ManagementMethod.BanEvent,
-      params: [event.id, ""],
+      params: [event.id, "Dismissed by admin"],
     })
 
-  const deleteEvent = () =>
-    manageRelay(url, {
+    if (error) {
+      alert(`Failed to dismiss the report: ${error}`)
+    } else {
+      onremove()
+    }
+  }
+
+  const deleteEvent = async () => {
+    const {error, result} = await manageRelay(url, {
       method: ManagementMethod.BanEvent,
-      params: [etag[1], ""],
+      params: [etag[1], reason],
     })
 
-  const banUser = () =>
-    manageRelay(url, {
+    if (error) {
+      alert(`Failed to delete the event: ${error}`)
+    } else {
+      await dismissReport()
+    }
+  }
+
+  const banUser = async () => {
+    const {error, result} = await manageRelay(url, {
       method: ManagementMethod.BanPubkey,
-      params: [$target?.pubkey || ptag[1], ""],
+      params: [$target?.pubkey || ptag[1], reason],
     })
+
+    if (error) {
+      alert(`Failed to ban the user: ${error}`)
+    } else {
+      await dismissReport()
+    }
+  }
 </script>
 
 <div class="card bg-base-200">
@@ -46,7 +68,7 @@
       {#if $target}
         <div class="card bg-base-100">
           <div class="card-body">
-            <NoteContent event={$target} />
+            <NoteCard event={$target} />
           </div>
         </div>
       {:else}
@@ -60,6 +82,14 @@
         <div>
           <h4 class="font-semibold">Reported User</h4>
           <p class="text-sm opacity-75">User: {displayProfile({pubkey: ptag[1]})}</p>
+        </div>
+      </div>
+    {/if}
+    {#if event.content}
+      <div class="card bg-base-100">
+        <div class="card-body flex flex-col gap-2">
+          <p class="font-bold">Additional context:</p>
+          <NoteContent {event} />
         </div>
       </div>
     {/if}

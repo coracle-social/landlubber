@@ -13,7 +13,10 @@
 <div class="bg-base-100 min-h-screen">
 	<header class="navbar bg-base-300">
   	<div class="container mx-auto flex justify-between items-center px-4">
-			<a href="/" class="font-bold text-xl">Landlubber</a>
+			<a href="/" class="font-bold text-4xl flex items-center gap-3" style="font-family: 'Pirata One', serif;">
+				<img src="/landlubber.png" alt="Landlubber" class="w-10 h-10 rounded-full border border-solid border-base-content" />
+				Landlubber
+			</a>
   		<div>
     		{#if $pubkey}
     			<div class="flex items-center gap-2">
@@ -51,7 +54,7 @@
   								</li>
     						{/each}
     						<li>
-    							<a href="/relays/new" class="justify-start text-sm">Add Relay</a>
+    							<a href="/relays/new" class="justify-start text-sm"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>Add Relay</a>
     						</li>
     						<div class="divider my-1"></div>
     						<li>
