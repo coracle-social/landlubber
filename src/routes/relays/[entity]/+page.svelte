@@ -30,7 +30,7 @@
 				</button>
 			{/each}
 		</nav>
-		<main class="flex flex-1 flex-col gap-8">
+		<main class="flex flex-1 flex-col gap-8 min-w-0 overflow-hidden">
 			{#if active === 'Reports'}
 				<Reports {url} />
 			{:else if active === 'User Access'}
