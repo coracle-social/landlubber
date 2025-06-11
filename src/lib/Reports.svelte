@@ -1,6 +1,6 @@
 <script lang="ts">
   import {onMount} from 'svelte'
-  import {uniqBy, sortBy} from '@welshman/lib'
+  import {uniqBy, sleep, sortBy} from '@welshman/lib'
   import {REPORT} from '@welshman/util'
   import type {TrustedEvent} from '@welshman/util'
   import {makeRelayFeed, makeKindFeed, makeIntersectionFeed} from '@welshman/feeds'
@@ -50,9 +50,20 @@
   <p class="opacity-75">View and process reports submitted by users.</p>
 </div>
 <div class="scroll-container flex flex-col gap-4" bind:this={element}>
-  {#each events as event (event.id)}
-    {#if !removed.includes(event.id)}
-      <ReportCard {url} {event} onremove={() => removed.push(event.id)} />
-    {/if}
-  {/each}
+  {#await sleep(1000)}
+    <div class="py-20 m-auto flex gap-3">
+      <div class="loading loading-sm"></div>
+      Loading...
+    </div>
+  {:then}
+    {#each events as event (event.id)}
+      {#if !removed.includes(event.id)}
+        <ReportCard {url} {event} onremove={() => removed.push(event.id)} />
+      {/if}
+    {:else}
+      <p class="py-20 text-center">
+        No reports found!
+      </p>
+    {/each}
+  {/await}
 </div>

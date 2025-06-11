@@ -46,6 +46,9 @@ export const imgproxy = (url: string, { w = 640, h = 1024 } = {}) => {
 
 export const entityLink = (entity: string) => `https://coracle.social/${entity}`;
 
+export const eventLink = (event: TrustedEvent, relays: string[]) =>
+  entityLink(nip19.neventEncode({id: event.id, relays}))
+
 export const pubkeyLink = (pubkey: string, relays = Router.get().FromPubkeys([pubkey]).getUrls()) =>
 	entityLink(nip19.nprofileEncode({ pubkey, relays }));
 

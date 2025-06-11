@@ -1,16 +1,16 @@
 <script lang="ts">
   import {onMount} from 'svelte'
-  import {uniqBy, sortBy} from '@welshman/lib'
+  import {uniqBy, sleep, sortBy} from '@welshman/lib'
   import {ManagementMethod} from '@welshman/util'
   import type {TrustedEvent} from '@welshman/util'
   import {manageRelay} from '@welshman/app'
   import BannedUser from '$lib/BannedUser.svelte'
 
   const {url} = $props()
-  const promise = manageRelay(url, {
+  const promise = Promise.all([sleep(1000), manageRelay(url, {
     method: ManagementMethod.ListBannedPubkeys,
     params: [],
-  })
+  })])
 </script>
 
 <div>
@@ -18,11 +18,11 @@
   <p class="opacity-75">View and manage banned users.</p>
 </div>
 {#await promise}
-  <div class="flex gap-2 justify-center items-center py-20">
-    <div class="loading" />
-    Loading banned users...
+  <div class="py-20 m-auto flex gap-3">
+    <div class="loading loading-sm"></div>
+    Loading...
   </div>
-{:then {error, result}}
+{:then [_, {error, result}]}
   {#if error}
     <div class="rounded-box p-4 bg-danger text-danger-content">
       Failed to load banned users: {error}
@@ -32,7 +32,7 @@
       {#each result as {pubkey, reason} (pubkey)}
         <BannedUser {url} {pubkey} {reason} />
       {:else}
-        <p class="py-20 text-center">No banned pubkeys found</p>
+        <p class="py-20 text-center">No banned users found!</p>
       {/each}
     </div>
   {/if}
