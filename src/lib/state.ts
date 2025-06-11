@@ -1,7 +1,15 @@
 import * as nip19 from 'nostr-tools/nip19';
-import {derived} from 'svelte/store'
-import { load, Pool, SocketEvent, Socket, AuthStateEvent, defaultSocketPolicies, makeSocketPolicyAuth } from '@welshman/net';
-import {custom, synced, deriveEvents} from '@welshman/store';
+import { derived } from 'svelte/store';
+import {
+	load,
+	Pool,
+	SocketEvent,
+	Socket,
+	AuthStateEvent,
+	defaultSocketPolicies,
+	makeSocketPolicyAuth
+} from '@welshman/net';
+import { custom, synced, deriveEvents } from '@welshman/store';
 import { always, on, call } from '@welshman/lib';
 import { normalizeRelayUrl, getIdFilters } from '@welshman/util';
 import type { StampedEvent } from '@welshman/util';
@@ -20,11 +28,11 @@ Router.configure({
 });
 
 defaultSocketPolicies.push(
-  makeSocketPolicyAuth({
-    sign: (event: StampedEvent) => signer.get()?.sign(event),
-    shouldAuth: (socket: Socket) => true,
-  }),
-)
+	makeSocketPolicyAuth({
+		sign: (event: StampedEvent) => signer.get()?.sign(event),
+		shouldAuth: (socket: Socket) => true
+	})
+);
 
 export const IMGPROXY_URL = 'https://imgproxy.coracle.social';
 
@@ -47,7 +55,7 @@ export const imgproxy = (url: string, { w = 640, h = 1024 } = {}) => {
 export const entityLink = (entity: string) => `https://coracle.social/${entity}`;
 
 export const eventLink = (event: TrustedEvent, relays: string[]) =>
-  entityLink(nip19.neventEncode({id: event.id, relays}))
+	entityLink(nip19.neventEncode({ id: event.id, relays }));
 
 export const pubkeyLink = (pubkey: string, relays = Router.get().FromPubkeys([pubkey]).getUrls()) =>
 	entityLink(nip19.nprofileEncode({ pubkey, relays }));
@@ -65,38 +73,37 @@ export const encodeRelay = (url: string) =>
 
 export const decodeRelay = (url: string) => normalizeRelayUrl(decodeURIComponent(url));
 
-
 export const deriveSocket = (url: string) =>
-  custom<Socket>(set => {
-    const pool = Pool.get()
-    const socket = pool.get(url)
+	custom<Socket>((set) => {
+		const pool = Pool.get();
+		const socket = pool.get(url);
 
-    set(socket)
+		set(socket);
 
-    const subs = [
-      on(socket, SocketEvent.Error, () => set(socket)),
-      on(socket, SocketEvent.Status, () => set(socket)),
-      on(socket.auth, AuthStateEvent.Status, () => set(socket)),
-    ]
+		const subs = [
+			on(socket, SocketEvent.Error, () => set(socket)),
+			on(socket, SocketEvent.Status, () => set(socket)),
+			on(socket.auth, AuthStateEvent.Status, () => set(socket))
+		];
 
-    return () => subs.forEach(call)
-  })
+		return () => subs.forEach(call);
+	});
 
 export const deriveEvent = (idOrAddress: string, hints: string[] = []) => {
-  let attempted = false
+	let attempted = false;
 
-  const filters = getIdFilters([idOrAddress])
-  const relays = [...hints, ...Router.get().options.getIndexerRelays()]
+	const filters = getIdFilters([idOrAddress]);
+	const relays = [...hints, ...Router.get().options.getIndexerRelays()];
 
-  return derived(
-    deriveEvents(repository, {filters, includeDeleted: true}),
-    (events: TrustedEvent[]) => {
-      if (!attempted && events.length === 0) {
-        load({relays, filters})
-        attempted = true
-      }
+	return derived(
+		deriveEvents(repository, { filters, includeDeleted: true }),
+		(events: TrustedEvent[]) => {
+			if (!attempted && events.length === 0) {
+				load({ relays, filters });
+				attempted = true;
+			}
 
-      return events[0]
-    },
-  )
-}
+			return events[0];
+		}
+	);
+};

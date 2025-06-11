@@ -1,18 +1,17 @@
 <script lang="ts">
-  import {formatTimestamp} from '@welshman/lib'
-  import {deriveProfileDisplay} from '@welshman/app'
-  import {parse, renderAsHtml} from '@welshman/content'
+	import { formatTimestamp } from '@welshman/lib';
+	import { deriveProfileDisplay } from '@welshman/app';
+	import { parse, renderAsHtml } from '@welshman/content';
+	import NoteContent from '$lib/NoteContent.svelte'
 
-  const {event} = $props()
-  const profileDisplay = deriveProfileDisplay(event.pubkey)
+	const { event } = $props();
+	const profileDisplay = deriveProfileDisplay(event.pubkey);
 </script>
 
 <div class="flex flex-col gap-2">
-  <div class="flex justify-between items-center">
-    <div class="font-bold">@{$profileDisplay}</div>
-    <div>{formatTimestamp(event.created_at)}</div>
-  </div>
-  <div>
-    {@html renderAsHtml(parse(event)).toString()}
-  </div>
+	<div class="flex items-center justify-between">
+		<div class="font-bold">@{$profileDisplay}</div>
+		<div>{formatTimestamp(event.created_at)}</div>
+	</div>
+	<NoteContent {event} />
 </div>

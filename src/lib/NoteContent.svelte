@@ -1,7 +1,9 @@
 <script lang="ts">
-  import {parse, renderAsHtml} from '@welshman/content'
+	import { parse, renderAsHtml } from '@welshman/content';
 
-  const {event} = $props()
+	const { event } = $props();
 </script>
 
-{@html renderAsHtml(parse(event)).toString()}
+<div class="break-words overflow-wrap-anywhere">
+  {@html renderAsHtml(parse(event)).toString()}
+</div>
