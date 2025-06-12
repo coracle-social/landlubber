@@ -9,7 +9,7 @@
 	const restoreUser = async () => {
 		const { error } = await manageRelay(url, {
 			method: ManagementMethod.AllowPubkey,
-			params: [pubkey, 'Restored by moderator']
+			params: [pubkey, '']
 		});
 
 		if (error) {
@@ -37,7 +37,7 @@
 
 <div class="card bg-base-200">
 	<div class="card-body flex flex-row items-center justify-between gap-4">
-		@{$profileDisplay} has been banned for {reason || 'no reason'}
+		@{$profileDisplay} has been banned for {reason || '[no reason provided]'}
 		{#if banned}
 			<button class="btn btn-sm btn-neutral" onclick={restoreUser}>Restore user</button>
 		{:else}

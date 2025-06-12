@@ -5,7 +5,7 @@
 	import { eventLink } from '$lib/state';
 	import NoteContent from '$lib/NoteContent.svelte';
 
-	const { url, event, onremove } = $props();
+	const { url, event, banned, onremove, onban, onrestore } = $props();
 
 	const profileDisplay = deriveProfileDisplay(event.pubkey);
 
@@ -21,12 +21,14 @@
 		(activeElement as HTMLElement).focus();
 
 		alert('Copied event JSON to clipboard!');
+		document.activeElement?.blur();
 	};
 
 	const deleteEvent = async () => {
+		document.activeElement?.blur();
 		const { error } = await manageRelay(url, {
 			method: ManagementMethod.BanEvent,
-			params: [event.id, 'Deleted by admin']
+			params: [event.id, '']
 		});
 
 		if (error) {
@@ -36,14 +38,31 @@
 		}
 	};
 
+	const restoreUser = async () => {
+		document.activeElement?.blur();
+		const { error } = await manageRelay(url, {
+			method: ManagementMethod.AllowPubkey,
+			params: [event.pubkey, '']
+		});
+
+		if (error) {
+			alert(`Failed to restore user: ${error}`);
+		} else {
+			onrestore();
+		}
+	};
+
 	const banUser = async () => {
+		document.activeElement?.blur();
 		const { error } = await manageRelay(url, {
 			method: ManagementMethod.BanPubkey,
-			params: [event.pubkey, 'Banned by admin']
+			params: [event.pubkey, '']
 		});
 
 		if (error) {
 			alert(`Failed to ban the user: ${error}`);
+		} else {
+			onban();
 		}
 	};
 </script>
@@ -51,6 +70,9 @@
 <tr>
 	<td class="font-semibold wrap-anywhere">
 		@{$profileDisplay}
+		{#if banned}
+			<span class="badge badge-xs badge-error">Banned</span>
+		{/if}
 	</td>
 	<td>
 		<span class="badge badge-xs badge-outline badge-round">{event.kind}</span>
@@ -71,9 +93,13 @@
 			</div>
 			<ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
 				<li><button onclick={copyEvent}>Copy Event JSON</button></li>
-				<li><a href={eventLink(event, [url])} target="_blank">View on NJump</a></li>
+				<li><a href={eventLink(event, [url])} target="_blank">View on Coracle</a></li>
+				{#if banned}
+					<li><button onclick={restoreUser}>Restore User</button></li>
+				{:else}
+					<li><button class="text-error" onclick={banUser}>Ban User</button></li>
+				{/if}
 				<li><button onclick={deleteEvent} class="text-error">Delete Event</button></li>
-				<li><button onclick={banUser} class="text-error">Ban User</button></li>
 			</ul>
 		</div>
 	</td>

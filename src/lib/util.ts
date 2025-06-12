@@ -15,7 +15,7 @@ export type Scroller = {
 export const makeScroller = ({
 	onScroll,
 	element,
-	delay = 1000,
+	delay = 600,
 	threshold = 2000
 }: ScrollerOpts) => {
 	let done = false;

@@ -1,15 +1,14 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { uniqBy, sleep, sortBy } from '@welshman/lib';
+	import { uniqBy, remove, pluck, sleep, sortBy } from '@welshman/lib';
 	import type { TrustedEvent } from '@welshman/util';
+	import { ManagementMethod } from '@welshman/util';
 	import { makeRelayFeed } from '@welshman/feeds';
-	import { makeFeedController } from '@welshman/app';
+	import { makeFeedController, manageRelay } from '@welshman/app';
 	import { makeScroller } from '$lib/util';
 	import EventRow from '$lib/EventRow.svelte';
 
 	const { url } = $props();
-
-	const removed = $state<string[]>([]);
 
 	const ctrl = makeFeedController({
 		useWindowing: true,
@@ -17,6 +16,8 @@
 		onEvent: (event: TrustedEvent) => buffer.push(event)
 	});
 
+	let banned = $state<string[]>([]);
+	let removed = $state<string[]>([]);
 	let element: Element | undefined = $state();
 	let buffer: TrustedEvent[] = $state([]);
 	let events: TrustedEvent[] = $state([]);
@@ -40,6 +41,13 @@
 			}
 		});
 
+		manageRelay(url, {
+			method: ManagementMethod.ListBannedPubkeys,
+			params: []
+		}).then(({ result = [] }) => {
+			banned = pluck<string>('pubkey', result);
+		});
+
 		return () => scroller.stop();
 	});
 </script>
@@ -49,7 +57,7 @@
 	<p class="opacity-75">View and manage all events from this relay.</p>
 </div>
 <div class="scroll-container flex flex-col gap-4" bind:this={element}>
-	{#await sleep(1000)}
+	{#await sleep(600)}
 		<div class="m-auto flex gap-3 py-20">
 			<div class="loading loading-sm"></div>
 			Loading...
@@ -68,7 +76,14 @@
 			<tbody>
 				{#each events as event (event.id)}
 					{#if !removed.includes(event.id)}
-						<EventRow {url} {event} onremove={() => removed.push(event.id)} />
+						<EventRow
+							{url}
+							{event}
+							banned={banned.includes(event.pubkey)}
+							onban={() => (banned = banned.concat(event.pubkey))}
+							onrestore={() => (banned = remove(event.pubkey, banned))}
+							onremove={() => (removed = removed.concat(event.id))}
+						/>
 					{/if}
 				{/each}
 			</tbody>

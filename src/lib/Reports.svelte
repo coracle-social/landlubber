@@ -50,7 +50,7 @@
 	<p class="opacity-75">View and process reports submitted by users.</p>
 </div>
 <div class="scroll-container flex flex-col gap-4" bind:this={element}>
-	{#await sleep(1000)}
+	{#await sleep(600)}
 		<div class="m-auto flex gap-3 py-20">
 			<div class="loading loading-sm"></div>
 			Loading...

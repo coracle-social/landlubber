@@ -6,7 +6,7 @@
 
 	const { url } = $props();
 	const promise = Promise.all([
-		sleep(1000),
+		sleep(600),
 		manageRelay(url, {
 			method: ManagementMethod.ListBannedPubkeys,
 			params: []
