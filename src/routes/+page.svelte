@@ -124,7 +124,7 @@
 		<!-- Relay Grid -->
 		<div class="mb-8 grid gap-4">
 			{#each $userRelays.sort() as relay (relay)}
-				<div
+				<button
 					class="card bg-base-100 border-base-300 hover:border-primary/30 cursor-pointer border transition-colors"
 					onclick={() => goToRelay(relay)}
 				>
@@ -171,7 +171,7 @@
 							</div>
 						</div>
 					</div>
-				</div>
+				</button>
 			{/each}
 		</div>
 		<div class="text-center">

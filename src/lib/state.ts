@@ -12,7 +12,7 @@ import {
 import { custom, synced, deriveEvents } from '@welshman/store';
 import { always, on, call } from '@welshman/lib';
 import { normalizeRelayUrl, getIdFilters } from '@welshman/util';
-import type { StampedEvent } from '@welshman/util';
+import type { StampedEvent, TrustedEvent } from '@welshman/util';
 import { Router } from '@welshman/router';
 import { appContext, repository, signer } from '@welshman/app';
 
@@ -36,7 +36,7 @@ defaultSocketPolicies.push(
 
 export const IMGPROXY_URL = 'https://imgproxy.coracle.social';
 
-export const dufflepud = (path: string) => DUFFLEPUD_URL + '/' + path;
+export const dufflepud = (path: string) => appContext.dufflepudUrl + '/' + path;
 
 export const imgproxy = (url: string, { w = 640, h = 1024 } = {}) => {
 	if (!url || url.match('gif$')) {
@@ -60,9 +60,9 @@ export const eventLink = (event: TrustedEvent, relays: string[]) =>
 export const pubkeyLink = (pubkey: string, relays = Router.get().FromPubkeys([pubkey]).getUrls()) =>
 	entityLink(nip19.nprofileEncode({ pubkey, relays }));
 
-export const userRelays = synced('userRelays', []);
+export const userRelays = synced<string[]>('userRelays', []);
 
-export const selectedRelay = synced<string>('selectedRelay', undefined);
+export const selectedRelay = synced<string | undefined>('selectedRelay', undefined);
 
 export const encodeRelay = (url: string) =>
 	encodeURIComponent(
@@ -93,7 +93,7 @@ export const deriveEvent = (idOrAddress: string, hints: string[] = []) => {
 	let attempted = false;
 
 	const filters = getIdFilters([idOrAddress]);
-	const relays = [...hints, ...Router.get().options.getIndexerRelays()];
+	const relays = [...hints, ...Router.get().options.getIndexerRelays!()];
 
 	return derived(
 		deriveEvents(repository, { filters, includeDeleted: true }),

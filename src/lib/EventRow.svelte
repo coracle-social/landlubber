@@ -4,10 +4,9 @@
 	import { ManagementMethod } from '@welshman/util';
 	import { eventLink } from '$lib/state';
 	import NoteContent from '$lib/NoteContent.svelte';
+	import ProfileLink from '$lib/ProfileLink.svelte';
 
 	const { url, event, banned, onremove, onban, onrestore } = $props();
-
-	const profileDisplay = deriveProfileDisplay(event.pubkey);
 
 	const copyEvent = () => {
 		const { activeElement } = document;
@@ -21,10 +20,12 @@
 		(activeElement as HTMLElement).focus();
 
 		alert('Copied event JSON to clipboard!');
+		// @ts-ignore
 		document.activeElement?.blur();
 	};
 
 	const deleteEvent = async () => {
+		// @ts-ignore
 		document.activeElement?.blur();
 		const { error } = await manageRelay(url, {
 			method: ManagementMethod.BanEvent,
@@ -39,6 +40,7 @@
 	};
 
 	const restoreUser = async () => {
+		// @ts-ignore
 		document.activeElement?.blur();
 		const { error } = await manageRelay(url, {
 			method: ManagementMethod.AllowPubkey,
@@ -53,6 +55,7 @@
 	};
 
 	const banUser = async () => {
+		// @ts-ignore
 		document.activeElement?.blur();
 		const { error } = await manageRelay(url, {
 			method: ManagementMethod.BanPubkey,
@@ -69,7 +72,7 @@
 
 <tr>
 	<td class="font-semibold wrap-anywhere">
-		@{$profileDisplay}
+  	<ProfileLink pubkey={event.pubkey} />
 		{#if banned}
 			<span class="badge badge-xs badge-error">Banned</span>
 		{/if}

@@ -30,7 +30,7 @@
 	const deleteEvent = async () => {
 		const { error } = await manageRelay(url, {
 			method: ManagementMethod.BanEvent,
-			params: [etag[1], reason]
+			params: [etag![1], reason]
 		});
 
 		if (error) {
@@ -43,7 +43,7 @@
 	const banUser = async () => {
 		const { error } = await manageRelay(url, {
 			method: ManagementMethod.BanPubkey,
-			params: [$target?.pubkey || ptag[1], reason]
+			params: [$target?.pubkey || ptag![1], reason]
 		});
 
 		if (error) {
@@ -105,7 +105,7 @@
 					class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow"
 				>
 					{#if target && $target}
-						<li><a href={eventLink($target)} target="_blank">View on Coracle</a></li>
+						<li><a href={eventLink($target, [url])} target="_blank">View on Coracle</a></li>
 					{/if}
 					<li><button onclick={dismissReport}>Dismiss</button></li>
 					{#if etag}

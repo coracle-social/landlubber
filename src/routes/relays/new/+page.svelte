@@ -40,7 +40,7 @@
 						id="relay-url"
 						type="text"
 						placeholder="wss://relay.example.com"
-						class="input input-bordered join-item focus:ring-primary/20 flex-1 text-base focus:ring-2"
+						class="input input-bordered join-item flex-1 text-base"
 						oninput={() => (check = '')}
 						bind:value={url}
 					/>
@@ -60,7 +60,7 @@
 						Test Connection
 					</button>
 				</div>
-				<label class="label pt-1">
+				<label class="label pt-1" for="relay-url">
 					<span class="label-text-alt text-base-content/60">
 						Enter a Nostr websocket URL starting with <code
 							class="bg-base-200 rounded px-1 py-0.5 text-xs">wss://</code
