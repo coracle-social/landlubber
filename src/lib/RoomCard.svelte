@@ -5,19 +5,19 @@
 	import ProfileLink from '$lib/ProfileLink.svelte';
 	import NoteContent from '$lib/NoteContent.svelte';
 	import NoteCard from '$lib/NoteCard.svelte';
-	import { deriveEvent, encodeRelay, eventLink } from '$lib/state';
+	import { deriveEvent, selectedRelay, encodeRelay, eventLink } from '$lib/state';
 
-	const { url, event, onremove } = $props();
+	const { event, onremove } = $props();
 	const h = getTagValue('d', event.tags) || ""
 	const name = getTagValue('name', event.tags)
 	const picture = getTagValue('picture', event.tags)
 	const about = getTagValue('about', event.tags)
 	const isPrivate = getTag('private', event.tags)
 	const isClosed = getTag('closed', event.tags)
-	const flotillaLink = `https://app.flotilla.social/${encodeRelay(url)}/${h}`
+	const flotillaLink = `https://app.flotilla.social/${encodeRelay($selectedRelay)}/${h}`
 
 	const deleteRoom = async () => {
-		const { error } = await manageRelay(url, {
+		const { error } = await manageRelay($selectedRelay, {
 			method: ManagementMethod.Nip29DeleteGroup,
 			params: [h]
 		});

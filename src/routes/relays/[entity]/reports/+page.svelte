@@ -5,16 +5,15 @@
 	import type { TrustedEvent } from '@welshman/util';
 	import { makeRelayFeed, makeKindFeed, makeIntersectionFeed } from '@welshman/feeds';
 	import { makeFeedController } from '@welshman/app';
-	import { makeScroller } from '$lib/util';
 	import ReportCard from '$lib/ReportCard.svelte';
-
-	const { url } = $props();
+	import { makeScroller } from '$lib/util';
+	import { selectedRelay } from '$lib/state';
 
 	const removed = $state<string[]>([]);
 
 	const ctrl = makeFeedController({
 		useWindowing: true,
-		feed: makeIntersectionFeed(makeRelayFeed(url), makeKindFeed(REPORT)),
+		feed: makeIntersectionFeed(makeRelayFeed($selectedRelay), makeKindFeed(REPORT)),
 		onEvent: (event: TrustedEvent) => buffer.push(event)
 	});
 
@@ -58,7 +57,7 @@
 	{:then}
 		{#each events as event (event.id)}
 			{#if !removed.includes(event.id)}
-				<ReportCard {url} {event} onremove={() => removed.push(event.id)} />
+				<ReportCard {event} onremove={() => removed.push(event.id)} />
 			{/if}
 		{:else}
 			<p class="py-20 text-center">No reports found!</p>

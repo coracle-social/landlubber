@@ -2,11 +2,11 @@
 	import { deriveProfileDisplay, manageRelay } from '@welshman/app';
 	import { formatTimestamp } from '@welshman/lib';
 	import { ManagementMethod } from '@welshman/util';
-	import { eventLink } from '$lib/state';
 	import NoteContent from '$lib/NoteContent.svelte';
 	import ProfileLink from '$lib/ProfileLink.svelte';
+	import { eventLink, selectedRelay } from '$lib/state';
 
-	const { url, event, banned, onremove, onban, onrestore } = $props();
+	const { event, banned, onremove, onban, onrestore } = $props();
 
 	const copyEvent = () => {
 		const { activeElement } = document;
@@ -27,7 +27,7 @@
 	const deleteEvent = async () => {
 		// @ts-ignore
 		document.activeElement?.blur();
-		const { error } = await manageRelay(url, {
+		const { error } = await manageRelay($selectedRelay, {
 			method: ManagementMethod.BanEvent,
 			params: [event.id, '']
 		});
@@ -42,7 +42,7 @@
 	const restoreUser = async () => {
 		// @ts-ignore
 		document.activeElement?.blur();
-		const { error } = await manageRelay(url, {
+		const { error } = await manageRelay($selectedRelay, {
 			method: ManagementMethod.AllowPubkey,
 			params: [event.pubkey, '']
 		});
@@ -57,7 +57,7 @@
 	const banUser = async () => {
 		// @ts-ignore
 		document.activeElement?.blur();
-		const { error } = await manageRelay(url, {
+		const { error } = await manageRelay($selectedRelay, {
 			method: ManagementMethod.BanPubkey,
 			params: [event.pubkey, '']
 		});
@@ -96,7 +96,7 @@
 			</div>
 			<ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
 				<li><button onclick={copyEvent}>Copy Event JSON</button></li>
-				<li><a href={eventLink(event, [url])} target="_blank">View on Coracle</a></li>
+				<li><a href={eventLink(event, [$selectedRelay])} target="_blank">View on Coracle</a></li>
 				{#if banned}
 					<li><button onclick={restoreUser}>Restore User</button></li>
 				{:else}

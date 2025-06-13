@@ -1,13 +1,14 @@
 <script lang="ts">
 	import { deriveProfileDisplay, manageRelay } from '@welshman/app';
 	import { ManagementMethod } from '@welshman/util';
+	import {selectedRelay} from '$lib/state'
 
-	const { url, pubkey, reason } = $props();
+	const { pubkey, reason } = $props();
 
 	const profileDisplay = deriveProfileDisplay(pubkey);
 
 	const restoreUser = async () => {
-		const { error } = await manageRelay(url, {
+		const { error } = await manageRelay($selectedRelay, {
 			method: ManagementMethod.AllowPubkey,
 			params: [pubkey, '']
 		});
@@ -20,7 +21,7 @@
 	};
 
 	const banUser = async () => {
-		const { error } = await manageRelay(url, {
+		const { error } = await manageRelay($selectedRelay, {
 			method: ManagementMethod.BanPubkey,
 			params: [pubkey, reason]
 		});

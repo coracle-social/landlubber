@@ -3,11 +3,11 @@
 	import { ManagementMethod } from '@welshman/util';
 	import { manageRelay } from '@welshman/app';
 	import BannedUser from '$lib/BannedUser.svelte';
+	import {selectedRelay} from '$lib/state'
 
-	const { url } = $props();
 	const promise = Promise.all([
 		sleep(600),
-		manageRelay(url, {
+		manageRelay($selectedRelay, {
 			method: ManagementMethod.ListBannedPubkeys,
 			params: []
 		})
@@ -29,7 +29,7 @@
 	{:else}
 		<div class="flex flex-col gap-4">
 			{#each result as { pubkey, reason } (pubkey)}
-				<BannedUser {url} {pubkey} {reason} />
+				<BannedUser {pubkey} {reason} />
 			{:else}
 				<p class="py-20 text-center">No banned users found!</p>
 			{/each}

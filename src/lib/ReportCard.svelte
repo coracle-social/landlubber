@@ -5,17 +5,17 @@
 	import ProfileLink from '$lib/ProfileLink.svelte';
 	import NoteContent from '$lib/NoteContent.svelte';
 	import NoteCard from '$lib/NoteCard.svelte';
-	import { deriveEvent, eventLink } from '$lib/state';
+	import { deriveEvent, selectedRelay, eventLink } from '$lib/state';
 
-	const { url, event, onremove } = $props();
+	const { event, onremove } = $props();
 
 	const etag = getTag('e', event.tags);
 	const ptag = getTag('p', event.tags);
 	const reason = etag?.[2] || ptag?.[2] || 'No reason provided';
-	const target = etag ? deriveEvent(etag[1], [url]) : undefined;
+	const target = etag ? deriveEvent(etag[1], [$selectedRelay]) : undefined;
 
 	const dismissReport = async () => {
-		const { error } = await manageRelay(url, {
+		const { error } = await manageRelay($selectedRelay, {
 			method: ManagementMethod.BanEvent,
 			params: [event.id, 'Dismissed by admin']
 		});
@@ -28,7 +28,7 @@
 	};
 
 	const deleteEvent = async () => {
-		const { error } = await manageRelay(url, {
+		const { error } = await manageRelay($selectedRelay, {
 			method: ManagementMethod.BanEvent,
 			params: [etag![1], reason]
 		});
@@ -41,7 +41,7 @@
 	};
 
 	const banUser = async () => {
-		const { error } = await manageRelay(url, {
+		const { error } = await manageRelay($selectedRelay, {
 			method: ManagementMethod.BanPubkey,
 			params: [$target?.pubkey || ptag![1], reason]
 		});
@@ -105,7 +105,7 @@
 					class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow"
 				>
 					{#if target && $target}
-						<li><a href={eventLink($target, [url])} target="_blank">View on Coracle</a></li>
+						<li><a href={eventLink($target, [$selectedRelay])} target="_blank">View on Coracle</a></li>
 					{/if}
 					<li><button onclick={dismissReport}>Dismiss</button></li>
 					{#if etag}

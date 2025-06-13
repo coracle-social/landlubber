@@ -7,14 +7,12 @@
 	import { makeFeedController } from '@welshman/app';
 	import { makeScroller } from '$lib/util';
 	import RoomCard from '$lib/RoomCard.svelte';
-	import { encodeRelay} from '$lib/state'
-
-	const { url } = $props();
+	import { selectedRelay, encodeRelay } from '$lib/state'
 
 	const removed = $state<string[]>([]);
 
 	const ctrl = makeFeedController({
-		feed: makeIntersectionFeed(makeRelayFeed(url), makeKindFeed(GROUP_META)),
+		feed: makeIntersectionFeed(makeRelayFeed($selectedRelay), makeKindFeed(GROUP_META)),
 		onEvent: (event: TrustedEvent) => buffer.push(event)
 	});
 
@@ -50,7 +48,7 @@
   	<h3 class="text-2xl">Chat Rooms</h3>
   	<p class="opacity-75">Manage NIP 29 rooms on this relay.</p>
   </div>
-  <a href="/relays/{encodeRelay(url)}/rooms/new" class="btn btn-primary">Add Room</a>
+  <a href="/relays/{encodeRelay($selectedRelay)}/rooms/new" class="btn btn-primary">Add Room</a>
 </div>
 <div class="scroll-container flex flex-col gap-4" bind:this={element}>
 	{#await sleep(600)}
@@ -61,7 +59,7 @@
 	{:then}
 		{#each events as event (event.id)}
 			{#if !removed.includes(event.id)}
-				<RoomCard {url} {event} onremove={() => removed.push(event.id)} />
+				<RoomCard {event} onremove={() => removed.push(event.id)} />
 			{/if}
 		{:else}
 			<p class="py-20 text-center">No rooms found!</p>

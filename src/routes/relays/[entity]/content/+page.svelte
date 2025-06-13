@@ -7,12 +7,11 @@
 	import { makeFeedController, manageRelay } from '@welshman/app';
 	import { makeScroller } from '$lib/util';
 	import EventRow from '$lib/EventRow.svelte';
-
-	const { url } = $props();
+	import {selectedRelay} from '$lib/state'
 
 	const ctrl = makeFeedController({
 		useWindowing: true,
-		feed: makeRelayFeed(url),
+		feed: makeRelayFeed($selectedRelay),
 		onEvent: (event: TrustedEvent) => buffer.push(event)
 	});
 
@@ -41,7 +40,7 @@
 			}
 		});
 
-		manageRelay(url, {
+		manageRelay($selectedRelay, {
 			method: ManagementMethod.ListBannedPubkeys,
 			params: []
 		}).then(({ result = [] }) => {
@@ -77,7 +76,6 @@
 				{#each events as event (event.id)}
 					{#if !removed.includes(event.id)}
 						<EventRow
-							{url}
 							{event}
 							banned={banned.includes(event.pubkey)}
 							onban={() => (banned = banned.concat(event.pubkey))}
