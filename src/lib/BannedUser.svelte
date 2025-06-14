@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { deriveProfileDisplay, manageRelay } from '@welshman/app';
 	import { ManagementMethod } from '@welshman/util';
-	import {selectedRelay} from '$lib/state'
+	import { selectedRelay } from '$lib/state';
 
 	const { pubkey, reason } = $props();
 

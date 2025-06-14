@@ -105,7 +105,9 @@
 					class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow"
 				>
 					{#if target && $target}
-						<li><a href={eventLink($target, [$selectedRelay])} target="_blank">View on Coracle</a></li>
+						<li>
+							<a href={eventLink($target, [$selectedRelay])} target="_blank">View on Coracle</a>
+						</li>
 					{/if}
 					<li><button onclick={dismissReport}>Dismiss</button></li>
 					{#if etag}

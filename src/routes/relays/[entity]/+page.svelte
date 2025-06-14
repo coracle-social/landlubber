@@ -1,6 +1,6 @@
 <script lang="ts">
-  import {goto} from '$app/navigation'
-  import {selectedRelay, encodeRelay} from '$lib/state'
+	import { goto } from '$app/navigation';
+	import { selectedRelay, encodeRelay } from '$lib/state';
 
-  goto(`/relays/${encodeRelay($selectedRelay)}/reports`)
+	goto(`/relays/${encodeRelay($selectedRelay)}/reports`);
 </script>

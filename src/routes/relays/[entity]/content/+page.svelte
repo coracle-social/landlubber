@@ -7,7 +7,7 @@
 	import { makeFeedController, manageRelay } from '@welshman/app';
 	import { makeScroller } from '$lib/util';
 	import EventRow from '$lib/EventRow.svelte';
-	import {selectedRelay} from '$lib/state'
+	import { selectedRelay } from '$lib/state';
 
 	const ctrl = makeFeedController({
 		useWindowing: true,

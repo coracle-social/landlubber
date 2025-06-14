@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { deriveProfileDisplay, manageRelay } from '@welshman/app';
+	import { manageRelay } from '@welshman/app';
 	import { formatTimestamp } from '@welshman/lib';
 	import { ManagementMethod } from '@welshman/util';
 	import NoteContent from '$lib/NoteContent.svelte';
@@ -20,12 +20,12 @@
 		(activeElement as HTMLElement).focus();
 
 		alert('Copied event JSON to clipboard!');
-		// @ts-ignore
+		// @ts-expect-error blur is fine
 		document.activeElement?.blur();
 	};
 
 	const deleteEvent = async () => {
-		// @ts-ignore
+		// @ts-expect-error blur is fine
 		document.activeElement?.blur();
 		const { error } = await manageRelay($selectedRelay, {
 			method: ManagementMethod.BanEvent,
@@ -40,7 +40,7 @@
 	};
 
 	const restoreUser = async () => {
-		// @ts-ignore
+		// @ts-expect-error blur is fine
 		document.activeElement?.blur();
 		const { error } = await manageRelay($selectedRelay, {
 			method: ManagementMethod.AllowPubkey,
@@ -55,7 +55,7 @@
 	};
 
 	const banUser = async () => {
-		// @ts-ignore
+		// @ts-expect-error blur is fine
 		document.activeElement?.blur();
 		const { error } = await manageRelay($selectedRelay, {
 			method: ManagementMethod.BanPubkey,
@@ -72,7 +72,7 @@
 
 <tr>
 	<td class="font-semibold wrap-anywhere">
-  	<ProfileLink pubkey={event.pubkey} />
+		<ProfileLink pubkey={event.pubkey} />
 		{#if banned}
 			<span class="badge badge-xs badge-error">Banned</span>
 		{/if}

@@ -62,7 +62,7 @@ export const pubkeyLink = (pubkey: string, relays = Router.get().FromPubkeys([pu
 
 export const userRelays = synced<string[]>('userRelays', []);
 
-export const selectedRelay = synced<string>('selectedRelay', "");
+export const selectedRelay = synced<string>('selectedRelay', '');
 
 export const encodeRelay = (url: string) =>
 	encodeURIComponent(

@@ -1,18 +1,18 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { uniqBy, sleep, sortBy } from '@welshman/lib';
-	import { GROUP_META } from '@welshman/util';
+	import { ROOM_META } from '@welshman/util';
 	import type { TrustedEvent } from '@welshman/util';
 	import { makeRelayFeed, makeKindFeed, makeIntersectionFeed } from '@welshman/feeds';
 	import { makeFeedController } from '@welshman/app';
 	import { makeScroller } from '$lib/util';
 	import RoomCard from '$lib/RoomCard.svelte';
-	import { selectedRelay, encodeRelay } from '$lib/state'
+	import { selectedRelay, encodeRelay } from '$lib/state';
 
 	const removed = $state<string[]>([]);
 
 	const ctrl = makeFeedController({
-		feed: makeIntersectionFeed(makeRelayFeed($selectedRelay), makeKindFeed(GROUP_META)),
+		feed: makeIntersectionFeed(makeRelayFeed($selectedRelay), makeKindFeed(ROOM_META)),
 		onEvent: (event: TrustedEvent) => buffer.push(event)
 	});
 
@@ -44,11 +44,11 @@
 </script>
 
 <div class="flex justify-between">
-  <div>
-  	<h3 class="text-2xl">Chat Rooms</h3>
-  	<p class="opacity-75">Manage NIP 29 rooms on this relay.</p>
-  </div>
-  <a href="/relays/{encodeRelay($selectedRelay)}/rooms/new" class="btn btn-primary">Add Room</a>
+	<div>
+		<h3 class="text-2xl">Chat Rooms</h3>
+		<p class="opacity-75">Manage NIP 29 rooms on this relay.</p>
+	</div>
+	<a href="/relays/{encodeRelay($selectedRelay)}/rooms/new" class="btn btn-primary">Add Room</a>
 </div>
 <div class="scroll-container flex flex-col gap-4" bind:this={element}>
 	{#await sleep(600)}

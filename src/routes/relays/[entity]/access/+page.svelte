@@ -3,7 +3,7 @@
 	import { ManagementMethod } from '@welshman/util';
 	import { manageRelay } from '@welshman/app';
 	import BannedUser from '$lib/BannedUser.svelte';
-	import {selectedRelay} from '$lib/state'
+	import { selectedRelay } from '$lib/state';
 
 	const promise = Promise.all([
 		sleep(600),
