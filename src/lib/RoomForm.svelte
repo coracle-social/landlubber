@@ -13,17 +13,15 @@
 
 		await onsubmit({
 			...room,
-			tags: uniqBy(nth(0), [...room.tags, ['name', values.name], ['about', values.about]])
+			tags: uniqBy(nth(0), [['name', name], ['about', about], ...room.tags])
 		});
 
 		loading = false;
 	};
 
 	let loading = $state(false);
-	let values = $state({
-		name: getTagValue('name', room.tags) || '',
-		about: getTagValue('about', room.tags) || ''
-	});
+	let name = $state(getTagValue('name', room.tags));
+	let about = $state(getTagValue('about', room.tags));
 </script>
 
 <div class="flex flex-col">
@@ -35,18 +33,14 @@
 		type="text"
 		placeholder="My Room"
 		class="input input-bordered w-full"
-		bind:value={values.name}
+		bind:value={name}
 	/>
 </div>
 <div class="flex flex-col">
 	<label class="label pb-2" for="room-description">
 		<span class="label-text text-base font-medium">Room Description</span>
 	</label>
-	<textarea
-		id="room-description"
-		class="textarea textarea-bordered w-full"
-		bind:value={values.about}
-	>
+	<textarea id="room-description" class="textarea textarea-bordered w-full" bind:value={about}>
 	</textarea>
 </div>
 <div class="flex justify-between">
