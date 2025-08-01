@@ -9,7 +9,7 @@ import {
 	defaultSocketPolicies,
 	makeSocketPolicyAuth
 } from '@welshman/net';
-import { custom, synced, deriveEvents } from '@welshman/store';
+import { custom, synced, localStorageProvider, deriveEvents } from '@welshman/store';
 import { always, on, call } from '@welshman/lib';
 import { normalizeRelayUrl, getIdFilters } from '@welshman/util';
 import type { StampedEvent, TrustedEvent } from '@welshman/util';
@@ -60,9 +60,17 @@ export const eventLink = (event: TrustedEvent, relays: string[]) =>
 export const pubkeyLink = (pubkey: string, relays = Router.get().FromPubkeys([pubkey]).getUrls()) =>
 	entityLink(nip19.nprofileEncode({ pubkey, relays }));
 
-export const userRelays = synced<string[]>('userRelays', []);
+export const userRelays = synced<string[]>({
+  key: 'userRelays',
+  defaultValue: [],
+  storage: localStorageProvider,
+});
 
-export const selectedRelay = synced<string>('selectedRelay', '');
+export const selectedRelay = synced<string>({
+  key: 'selectedRelay',
+  defaultValue: '',
+  storage: localStorageProvider,
+});
 
 export const encodeRelay = (url: string) =>
 	encodeURIComponent(
