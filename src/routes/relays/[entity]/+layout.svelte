@@ -1,15 +1,15 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { displayRelayUrl, normalizeRelayUrl } from '@welshman/util';
-	import { decodeRelay } from '$lib/state';
+	import { encodeRelay } from '$lib/state';
 	import { selectedRelay } from '$lib/state';
 
 	const { entity } = $page.params;
 	const { pathname } = new URL($page.url);
 
-	const buildPath = (section: string) => `/relays/${entity}/${section}`;
+	const buildPath = (section: string) => `/relays/${encodeRelay(entity)}/${section}`;
 
-	selectedRelay.set(normalizeRelayUrl(decodeRelay(entity)));
+	selectedRelay.set(normalizeRelayUrl(entity));
 </script>
 
 <div class="flex flex-col gap-4">
