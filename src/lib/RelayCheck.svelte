@@ -32,7 +32,7 @@
 			<tr>
 				<td class="text-left">Found relay profile</td>
 				<td class="w-16 text-center">
-					{#if $relay?.profile}
+					{#if $relay}
 						<span class="text-success font-bold">✓</span>
 					{:else if loading}
 						<span class="loading loading-xs opacity-50"></span>
@@ -70,9 +70,9 @@
 			<tr>
 				<td class="text-left">Supports relay management</td>
 				<td class="w-16 text-center">
-					{#if $relay?.profile?.supported_nips?.includes(86)}
+					{#if $relay?.supported_nips?.includes(86)}
 						<span class="text-success font-bold">✓</span>
-					{:else if loading && !$relay?.profile}
+					{:else if loading && !$relay}
 						<span class="loading loading-xs opacity-50"></span>
 					{:else}
 						<span class="text-error font-bold">✗</span>

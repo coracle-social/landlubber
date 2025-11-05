@@ -1,5 +1,5 @@
 import * as nip19 from 'nostr-tools/nip19';
-import { derived } from 'svelte/store';
+import { derived, writable } from 'svelte/store';
 import {
 	load,
 	Pool,
@@ -10,11 +10,12 @@ import {
 	makeSocketPolicyAuth
 } from '@welshman/net';
 import { custom, synced, localStorageProvider, deriveEvents } from '@welshman/store';
-import { always, on, call } from '@welshman/lib';
+import { always, tryCatch, on, call } from '@welshman/lib';
+import { sync } from '@welshman/store';
 import { normalizeRelayUrl, getIdFilters } from '@welshman/util';
-import type { StampedEvent, TrustedEvent } from '@welshman/util';
+import type { StampedEvent, Filter, TrustedEvent } from '@welshman/util';
 import { Router } from '@welshman/router';
-import { appContext, repository, signer } from '@welshman/app';
+import { pubkey, sessions, appContext, repository, signer } from '@welshman/app';
 
 appContext.dufflepudUrl = 'https://dufflepud.onrender.com';
 
@@ -33,6 +34,15 @@ defaultSocketPolicies.push(
 		shouldAuth: (socket: Socket) => true
 	})
 );
+
+const storage = {
+	get: async <T>(key: string): Promise<T | undefined> => tryCatch(() => JSON.parse(localStorage.getItem(key) || "")),
+	set: async <T>(key: string, value: T) => localStorage.setItem(key, JSON.stringify(value)),
+	clear: () => localStorage.clear()
+};
+
+sync({ key: 'pubkey', store: pubkey, storage });
+sync({ key: 'sessions', store: sessions, storage });
 
 export const IMGPROXY_URL = 'https://imgproxy.coracle.social';
 
@@ -61,15 +71,15 @@ export const pubkeyLink = (pubkey: string, relays = Router.get().FromPubkeys([pu
 	entityLink(nip19.nprofileEncode({ pubkey, relays }));
 
 export const userRelays = synced<string[]>({
-  key: 'userRelays',
-  defaultValue: [],
-  storage: localStorageProvider,
+	key: 'userRelays',
+	defaultValue: [],
+	storage: localStorageProvider
 });
 
 export const selectedRelay = synced<string>({
-  key: 'selectedRelay',
-  defaultValue: '',
-  storage: localStorageProvider,
+	key: 'selectedRelay',
+	defaultValue: '',
+	storage: localStorageProvider
 });
 
 export const encodeRelay = (url: string) =>
@@ -114,4 +124,14 @@ export const deriveEvent = (idOrAddress: string, hints: string[] = []) => {
 			return events[0];
 		}
 	);
+};
+
+export const deriveEventsForUrl = (url: string, filters: Filter[]) => {
+	const store = writable<TrustedEvent[]>([]);
+
+	load({ relays: [url], filters }).then((events) => {
+		store.set(events);
+	});
+
+	return store;
 };

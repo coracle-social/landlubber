@@ -9,7 +9,7 @@
 	const about = getTagValue('about', event.tags);
 	const isPrivate = getTag('private', event.tags);
 	const isClosed = getTag('closed', event.tags);
-	const flotillaLink = `https://app.flotilla.social/spaces/${encodeRelay($selectedRelay)}/${room.id}`;
+	const flotillaLink = `https://app.flotilla.social/spaces/${encodeRelay($selectedRelay)}/${room.h}`;
 
 	const _deleteRoom = async () => {
 		const error = await getThunkError(deleteRoom($selectedRelay, room));
@@ -56,7 +56,11 @@
 				>
 					<li><a href={flotillaLink} target="_blank">View on Flotilla</a></li>
 					<li>
-						<a href="/relays/{encodeRelay($selectedRelay)}/rooms/{room.id}/edit">Edit room</a>
+						<a href="/relays/{encodeRelay($selectedRelay)}/rooms/{room.h}/members">Manage Members</a
+						>
+					</li>
+					<li>
+						<a href="/relays/{encodeRelay($selectedRelay)}/rooms/{room.h}/edit">Edit room</a>
 					</li>
 					<li><button onclick={_deleteRoom} class="text-error">Delete room</button></li>
 				</ul>

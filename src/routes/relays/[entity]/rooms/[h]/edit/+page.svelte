@@ -4,17 +4,17 @@
 	import { displayRelayUrl, ROOM_META, readRoomMeta } from '@welshman/util';
 	import type { RoomMeta } from '@welshman/util';
 	import { load } from '@welshman/net';
-	import { getThunkError, editRoom } from '@welshman/app';
+	import { waitForThunkError, editRoom } from '@welshman/app';
 	import RoomForm from '$lib/RoomForm.svelte';
 	import { encodeRelay, selectedRelay } from '$lib/state';
 
 	const { h } = $page.params;
 
 	const onsubmit = async (room: RoomMeta) => {
-		const editMessage = await getThunkError(editRoom($selectedRelay, room));
+		const error = await waitForThunkError(editRoom($selectedRelay, room));
 
-		if (editMessage) {
-			return alert(editMessage);
+		if (error) {
+			return alert(error);
 		}
 
 		goto(`/relays/${encodeRelay($selectedRelay)}/rooms`);

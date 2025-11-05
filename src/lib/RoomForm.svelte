@@ -1,7 +1,4 @@
 <script lang="ts">
-	import { nth, uniqBy } from '@welshman/lib';
-	import { getTagValue } from '@welshman/util';
-
 	const { room, onsubmit } = $props();
 
 	function goBack() {
@@ -11,17 +8,14 @@
 	const submit = async () => {
 		loading = true;
 
-		await onsubmit({
-			...room,
-			tags: uniqBy(nth(0), [['name', name], ['about', about], ...room.tags])
-		});
+		await onsubmit({ ...room, name, about });
 
 		loading = false;
 	};
 
 	let loading = $state(false);
-	let name = $state(getTagValue('name', room.tags));
-	let about = $state(getTagValue('about', room.tags));
+	let name = $state(room.name);
+	let about = $state(room.about);
 </script>
 
 <div class="flex flex-col">
