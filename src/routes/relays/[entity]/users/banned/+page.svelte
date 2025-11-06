@@ -15,7 +15,7 @@
 </script>
 
 <div>
-	<h3 class="text-2xl">User Management</h3>
+	<h3 class="text-2xl">Banned Users</h3>
 	<p class="opacity-75">View and manage banned users.</p>
 </div>
 {#await promise}

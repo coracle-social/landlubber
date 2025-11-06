@@ -36,9 +36,9 @@
 				Reports
 			</a>
 			<a
-				href={buildPath('access')}
+				href={buildPath('users')}
 				class="rounded-box hover:bg-base-200 flex items-center justify-start gap-4 px-4 py-2 transition-colors"
-				class:bg-base-200={pathname.startsWith(buildPath('access'))}
+				class:bg-base-200={pathname.startsWith(buildPath('users'))}
 			>
 				<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 					<path
@@ -48,7 +48,22 @@
 						d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
 					></path>
 				</svg>
-				User Access
+				Members
+			</a>
+			<a
+				href={buildPath('users/banned')}
+				class="rounded-box hover:bg-base-200 flex items-center justify-start gap-4 px-4 py-2 transition-colors"
+				class:bg-base-200={pathname.startsWith(buildPath('users/banned'))}
+			>
+				<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="2"
+						d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"
+					></path>
+				</svg>
+				Banned Users
 			</a>
 			<a
 				href={buildPath('content')}
