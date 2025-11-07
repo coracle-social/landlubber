@@ -36,7 +36,8 @@ defaultSocketPolicies.push(
 );
 
 const storage = {
-	get: async <T>(key: string): Promise<T | undefined> => tryCatch(() => JSON.parse(localStorage.getItem(key) || "")),
+	get: async <T>(key: string): Promise<T | undefined> =>
+		tryCatch(() => JSON.parse(localStorage.getItem(key) || '')),
 	set: async <T>(key: string, value: T) => localStorage.setItem(key, JSON.stringify(value)),
 	clear: () => localStorage.clear()
 };

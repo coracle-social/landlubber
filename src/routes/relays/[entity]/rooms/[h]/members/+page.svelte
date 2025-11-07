@@ -23,7 +23,7 @@
 	const update = () => key++;
 
 	const addMember = async () => {
-		let pubkey = (prompt('Enter member public key (npub or hex):') || "").trim();
+		let pubkey = (prompt('Enter member public key (npub or hex):') || '').trim();
 
 		if (pubkey.startsWith('npub')) {
 			try {
