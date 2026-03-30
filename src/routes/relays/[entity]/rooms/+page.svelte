@@ -16,13 +16,11 @@
 		onEvent: (event: TrustedEvent) => buffer.push(event)
 	});
 
-	let element: Element | undefined = $state();
 	let buffer: TrustedEvent[] = $state([]);
 	let events: TrustedEvent[] = $state([]);
 
 	onMount(() => {
 		const scroller = makeScroller({
-			element: element!,
 			delay: 300,
 			threshold: 3000,
 			onScroll: () => {
@@ -50,7 +48,7 @@
 	</div>
 	<a href="/relays/{encodeRelay($selectedRelay)}/rooms/new" class="btn btn-primary">Add Room</a>
 </div>
-<div class="scroll-container flex flex-col gap-4" bind:this={element}>
+<div class="flex flex-col gap-4">
 	{#await sleep(600)}
 		<div class="m-auto flex gap-3 py-20">
 			<div class="loading loading-sm"></div>

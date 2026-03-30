@@ -2,8 +2,8 @@ import { sleep } from '@welshman/lib';
 
 export type ScrollerOpts = {
 	onScroll: () => any;
-	element: Element;
 	threshold?: number;
+	reverse?: boolean;
 	delay?: number;
 };
 
@@ -14,23 +14,24 @@ export type Scroller = {
 
 export const makeScroller = ({
 	onScroll,
-	element,
-	delay = 600,
-	threshold = 2000
+	delay = 1000,
+	threshold = 2000,
+	reverse = false
 }: ScrollerOpts) => {
 	let done = false;
 
-	const container = element.classList.contains('scroll-container')
-		? element
-		: element.closest('.scroll-container');
+	const container = document.body;
 
 	const check = async () => {
 		if (container) {
 			// While we have empty space, fill it
 			const { scrollY, innerHeight } = window;
-			const { scrollHeight, scrollTop } = container;
+			const { scrollHeight, scrollTop, clientHeight } = container;
+			const viewHeight = clientHeight || innerHeight;
 			const offset = Math.abs(scrollTop || scrollY);
-			const shouldLoad = offset + innerHeight + threshold > scrollHeight;
+			const shouldLoad = reverse
+				? offset < threshold
+				: offset + viewHeight + threshold > scrollHeight;
 
 			// Only trigger loading the first time we reach the threshold
 			if (shouldLoad) {
